@@ -34,8 +34,8 @@ export function ResultsDisplay({ result, onReset }: ResultsDisplayProps) {
     : "from-red-500 to-orange-400"
 
   return (
-    <div className="mesh-bg min-h-screen">
-    <div className="max-w-2xl mx-auto px-4 py-10">
+  <div className="mesh-bg min-h-screen">
+  <div className="w-full max-w-[88%] xl:max-w-5xl mx-auto px-4 py-10">
 
         <Button
           variant="ghost"
