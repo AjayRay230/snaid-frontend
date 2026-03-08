@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
 import type { SnakeResult } from "@/lib/types"
 import { AlertCircle, ArrowLeft, Shield, Zap, MapPin, Microscope, Activity, Dna } from "lucide-react"
+import { HospitalFinder } from "./hospital-finder"
 
 interface ResultsDisplayProps {
   result: SnakeResult
@@ -34,97 +34,92 @@ export function ResultsDisplay({ result, onReset }: ResultsDisplayProps) {
     : "from-red-500 to-orange-400"
 
   return (
-  <div className="mesh-bg min-h-screen">
-  <div className="w-full max-w-[88%] xl:max-w-5xl mx-auto px-4 py-10">
+    <div className="mesh-bg min-h-screen">
+      <div className="w-full max-w-[88%] xl:max-w-5xl mx-auto px-4 py-10">
 
         <Button
           variant="ghost"
           onClick={onReset}
-          className="mb-6 text-muted-foreground hover:text-foreground gap-2 pl-0 hover:bg-transparent"
+          className="mb-6 gap-2 pl-0 text-foreground/70 hover:text-foreground hover:bg-transparent"
         >
           <ArrowLeft className="h-4 w-4" />
           Back to Identification
         </Button>
 
-        {/* ── Species Hero Card ── */}
-        <div className={`glass rounded-2xl overflow-hidden shadow-2xl mb-4 animate-fade-up
-          ${isDangerous ? "ring-1 ring-red-500/30" : "ring-1 ring-primary/20"}`}
-        >
-          {/* Top bar — danger-coded */}
-          <div className={`h-1 w-full ${isDangerous
-            ? "bg-gradient-to-r from-red-600 via-orange-500 to-red-600"
-            : "bg-gradient-to-r from-transparent via-primary to-transparent"
+        {/* ── Species Card ── */}
+        <div className="bg-card rounded-2xl shadow-lg border border-border overflow-hidden mb-4 animate-fade-up">
+          {/* Top bar */}
+          <div className={`h-1.5 w-full ${isDangerous
+            ? "bg-gradient-to-r from-red-500 via-orange-400 to-red-500"
+            : "bg-gradient-to-r from-emerald-500 via-green-400 to-emerald-500"
           }`} />
 
           <div className="p-6">
-            {/* Header row */}
-            <div className="flex items-start justify-between gap-3 mb-6">
+            {/* Header */}
+            <div className="flex items-start justify-between gap-4 mb-6 flex-wrap">
               <div>
                 <div className="flex items-center gap-2 mb-2">
-                  <div className="w-6 h-6 rounded-md bg-primary/15 flex items-center justify-center">
+                  <div className="w-6 h-6 rounded-md bg-primary/15 border border-primary/20 flex items-center justify-center">
                     <Dna className="h-3.5 w-3.5 text-primary" />
                   </div>
                   <span className="text-[10px] font-bold tracking-[0.2em] uppercase text-muted-foreground">
                     Identified Species
                   </span>
                 </div>
-                <h1 className="text-3xl font-bold italic text-primary leading-tight">
+                <h1 className="text-3xl md:text-4xl font-bold italic text-primary leading-tight">
                   {result["Predicted Species"]}
                 </h1>
               </div>
-              <Badge
-                variant={isVenomous ? "destructive" : "default"}
-                className={`shrink-0 mt-1 text-xs px-3 py-1.5 font-bold
-                  ${isVenomous
-                    ? "bg-red-500/20 text-red-300 border border-red-500/30 hover:bg-red-500/25"
-                    : "bg-primary/20 text-primary border border-primary/30 hover:bg-primary/25"
-                  }`}
-              >
+              <span className={`shrink-0 mt-1 text-xs px-4 py-1.5 rounded-full font-bold border
+                ${isVenomous
+                  ? "bg-red-100 dark:bg-red-500/20 text-red-700 dark:text-red-300 border-red-300 dark:border-red-500/40"
+                  : "bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border-emerald-300 dark:border-emerald-500/40"
+                }`}>
                 {result["Venomous status"]}
-              </Badge>
+              </span>
             </div>
 
             {/* Confidence */}
-            <div className="bg-black/20 rounded-xl p-4 mb-5 animate-fade-up-2">
-              <div className="flex items-center justify-between mb-2">
+            <div className="bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800/50 rounded-xl p-5 mb-6 animate-fade-up-2">
+              <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
-                  <Activity className="h-3.5 w-3.5 text-blue-400" />
-                  <span className="text-xs font-semibold text-blue-300">Confidence</span>
+                  <Activity className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                  <span className="text-sm font-semibold text-blue-800 dark:text-blue-300">
+                    Identification Confidence
+                  </span>
                 </div>
-                <span className="text-xl font-black font-mono tabular-nums text-blue-300">
+                <span className="text-2xl font-black font-mono tabular-nums text-blue-700 dark:text-blue-300">
                   {result["Identification Confidence"]}
                 </span>
               </div>
-              <div className="w-full bg-white/10 rounded-full h-2.5 overflow-hidden">
+              <div className="w-full bg-blue-200 dark:bg-blue-900/60 rounded-full h-3 overflow-hidden">
                 <div
-                  className={`bg-gradient-to-r ${confidenceGradient} h-2.5 rounded-full transition-all duration-1000 ease-out`}
+                  className={`bg-gradient-to-r ${confidenceGradient} h-3 rounded-full transition-all duration-1000 ease-out`}
                   style={{ width: `${barWidth}%` }}
                 />
               </div>
-              <div className="flex justify-between mt-1">
+              <div className="flex justify-between mt-1 px-0.5">
                 {[0, 25, 50, 75, 100].map(v => (
-                  <span key={v} className="text-[9px] text-white/20 font-mono">{v}%</span>
+                  <span key={v} className="text-[10px] text-blue-400/70 font-mono">{v}%</span>
                 ))}
               </div>
             </div>
 
             {/* About */}
             <div className="mb-5 animate-fade-up-2">
-              <div className="flex items-center gap-2 mb-2">
-                <Microscope className="h-3.5 w-3.5 text-primary" />
-                <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
-                  About This Species
-                </span>
+              <div className="flex items-center gap-2 mb-2.5">
+                <Microscope className="h-4 w-4 text-primary" />
+                <span className="text-sm font-bold text-foreground">About This Species</span>
               </div>
-              <p className="text-sm text-foreground/75 leading-relaxed">
+              <p className="text-sm text-foreground/70 dark:text-foreground/65 leading-relaxed">
                 {result["About This Snake"]}
               </p>
             </div>
 
             {/* Habitat */}
-            <div className="bg-black/20 rounded-xl p-4 animate-fade-up-3">
+            <div className="bg-muted/60 dark:bg-muted/30 border border-border rounded-xl p-4 animate-fade-up-3">
               <div className="flex items-center gap-2 mb-1.5">
-                <MapPin className="h-3.5 w-3.5 text-accent" />
+                <MapPin className="h-4 w-4 text-accent" />
                 <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
                   Habitat &amp; Distribution
                 </span>
@@ -135,57 +130,63 @@ export function ResultsDisplay({ result, onReset }: ResultsDisplayProps) {
         </div>
 
         {/* ── Medical Card ── */}
-        <div className={`glass rounded-2xl overflow-hidden shadow-2xl mb-4 animate-fade-up-2
-          ${isDangerous ? "ring-1 ring-red-500/30" : "ring-1 ring-emerald-500/20"}`}
-        >
-          <div className={`h-0.5 w-full ${isDangerous
-            ? "bg-gradient-to-r from-transparent via-red-500 to-transparent"
-            : "bg-gradient-to-r from-transparent via-emerald-500 to-transparent"
+        <div className="bg-card rounded-2xl shadow-lg border border-border overflow-hidden mb-4 animate-fade-up-2">
+          <div className={`h-1.5 w-full ${isDangerous
+            ? "bg-gradient-to-r from-red-500 via-orange-400 to-red-500"
+            : "bg-gradient-to-r from-emerald-500 via-green-400 to-emerald-500"
           }`} />
 
           <div className="p-6">
             <div className="flex items-center gap-2 mb-5">
-              <AlertCircle className={`h-4 w-4 ${isDangerous ? "text-red-400" : "text-emerald-400"}`} />
-              <span className={`text-sm font-bold ${isDangerous ? "text-red-400" : "text-emerald-400"}`}>
+              <AlertCircle className={`h-4 w-4 ${isDangerous ? "text-red-600 dark:text-red-400" : "text-emerald-600 dark:text-emerald-400"}`} />
+              <span className={`text-base font-bold ${isDangerous ? "text-red-700 dark:text-red-400" : "text-emerald-700 dark:text-emerald-400"}`}>
                 Danger Level &amp; Medical Information
               </span>
             </div>
 
             {/* Danger badge */}
             <div className="flex items-center gap-3 mb-5">
-              <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg font-bold text-sm
+              <span className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg font-bold text-sm border
                 ${isDangerous
-                  ? "bg-red-500/20 text-red-300 border border-red-500/30 animate-danger-pulse"
-                  : "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"
+                  ? "bg-red-100 dark:bg-red-500/20 text-red-700 dark:text-red-300 border-red-300 dark:border-red-500/40 animate-danger-pulse"
+                  : "bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border-emerald-300 dark:border-emerald-500/40"
                 }`}>
                 {isDangerous ? "⚠" : "✓"} {result["Danger Level"].toUpperCase()}
-              </div>
+              </span>
               {isDangerous && (
-                <span className="text-xs text-red-400/80">Seek medical attention immediately if bitten</span>
+                <span className="text-xs text-red-600 dark:text-red-400 font-medium">
+                  Seek medical attention immediately if bitten
+                </span>
               )}
             </div>
 
-            {/* Antivenom box */}
-            <div className={`rounded-xl p-4 mb-5 border
+            {/* Antivenom */}
+            <div className={`rounded-xl p-5 mb-5 border
               ${hasAntivenom
-                ? "bg-emerald-500/10 border-emerald-500/25"
-                : "bg-white/5 border-white/10"
+                ? "bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-800/50"
+                : "bg-muted/50 border-border"
               }`}>
               <div className="flex items-start gap-3">
                 <div className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0
-                  ${hasAntivenom ? "bg-emerald-500/20" : "bg-white/10"}`}>
-                  <Shield className={`h-4 w-4 ${hasAntivenom ? "text-emerald-400" : "text-muted-foreground"}`} />
+                  ${hasAntivenom
+                    ? "bg-emerald-200 dark:bg-emerald-500/30"
+                    : "bg-muted"
+                  }`}>
+                  <Shield className={`h-4 w-4 ${hasAntivenom ? "text-emerald-700 dark:text-emerald-400" : "text-muted-foreground"}`} />
                 </div>
                 <div>
                   <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-muted-foreground mb-1">
                     Recommended Antivenom
                   </p>
                   <p className={`text-sm font-bold leading-snug
-                    ${hasAntivenom ? "text-emerald-300" : "text-muted-foreground"}`}>
+                    ${hasAntivenom
+                      ? "text-emerald-800 dark:text-emerald-300"
+                      : "text-muted-foreground"
+                    }`}>
                     {result["Recommended Antivenom"]}
                   </p>
                   {hasAntivenom && (
-                    <p className="text-xs text-emerald-400/60 mt-1">
+                    <p className="text-xs text-emerald-600/80 dark:text-emerald-400/60 mt-1">
                       Inform emergency staff of this species name
                     </p>
                   )}
@@ -194,10 +195,10 @@ export function ResultsDisplay({ result, onReset }: ResultsDisplayProps) {
             </div>
 
             {/* Emergency steps */}
-            <div className="bg-red-500/8 border border-red-500/20 rounded-xl p-4 mb-4">
+            <div className="bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800/50 rounded-xl p-5 mb-4">
               <div className="flex items-center gap-2 mb-3">
-                <Zap className="h-3.5 w-3.5 text-red-400" />
-                <span className="text-xs font-bold uppercase tracking-widest text-red-400">
+                <Zap className="h-3.5 w-3.5 text-red-600 dark:text-red-400" />
+                <span className="text-xs font-bold uppercase tracking-widest text-red-700 dark:text-red-400">
                   If Bitten — Emergency Response
                 </span>
               </div>
@@ -211,8 +212,8 @@ export function ResultsDisplay({ result, onReset }: ResultsDisplayProps) {
                   `Tell medical staff: species is "${result["Predicted Species"]}"`,
                   "Antivenom may be required — every second counts",
                 ].map((step, i) => (
-                  <li key={i} className="flex gap-3 text-red-300/80 text-xs">
-                    <span className="font-black text-red-500 shrink-0 font-mono">{i + 1}.</span>
+                  <li key={i} className="flex gap-3 text-red-800 dark:text-red-300/90 text-sm">
+                    <span className="font-black text-red-500 dark:text-red-400 shrink-0 font-mono">{i + 1}.</span>
                     <span>{step}</span>
                   </li>
                 ))}
@@ -220,18 +221,18 @@ export function ResultsDisplay({ result, onReset }: ResultsDisplayProps) {
             </div>
 
             {/* Prevention */}
-            <div className="bg-amber-500/8 border border-amber-500/20 rounded-xl p-4">
-              <div className="flex items-center gap-2 mb-3">
-                <span className="text-xs font-bold uppercase tracking-widest text-amber-400">Prevention</span>
-              </div>
-              <ul className="space-y-1.5">
+            <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/40 rounded-xl p-5">
+              <span className="text-xs font-bold uppercase tracking-widest text-amber-700 dark:text-amber-400 block mb-3">
+                Prevention &amp; Safety
+              </span>
+              <ul className="space-y-2">
                 {[
                   "Wear boots and long pants in snake-prone areas",
                   "Watch where you step and place your hands",
                   "Avoid handling snakes unless trained",
                   "Be extra cautious during warm months",
                 ].map((tip, i) => (
-                  <li key={i} className="flex gap-2 text-amber-300/70 text-xs">
+                  <li key={i} className="flex gap-2 text-amber-800 dark:text-amber-300/80 text-sm">
                     <span className="font-bold shrink-0">•</span>
                     {tip}
                   </li>
@@ -241,13 +242,25 @@ export function ResultsDisplay({ result, onReset }: ResultsDisplayProps) {
           </div>
         </div>
 
+        {/* ── Hospital Finder Card ── */}
+        <div className="bg-card rounded-2xl shadow-lg border border-border overflow-hidden mb-4 animate-fade-up-3">
+          <div className="h-1.5 bg-gradient-to-r from-transparent via-red-500 to-transparent" />
+          <div className="p-6">
+            <HospitalFinder />
+          </div>
+        </div>
+
         {/* Disclaimer */}
-        <p className="text-center text-xs text-muted-foreground/40 mb-4">
+        <p className="text-center text-xs text-muted-foreground/50 mb-6">
           For educational purposes only. Always consult healthcare professionals in emergencies.
         </p>
 
         <div className="flex justify-center pb-8">
-          <Button onClick={onReset} className="bg-primary/90 hover:bg-primary text-primary-foreground gap-2">
+          <Button
+            onClick={onReset}
+            className="bg-primary hover:bg-primary/90 text-primary-foreground gap-2 shadow-sm"
+            size="lg"
+          >
             <ArrowLeft className="h-4 w-4" />
             Identify Another Snake
           </Button>
