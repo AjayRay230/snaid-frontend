@@ -14,14 +14,16 @@ interface ResultsDisplayProps {
 export function ResultsDisplay({ result, onReset }: ResultsDisplayProps) {
   const [barWidth, setBarWidth] = useState(0)
 
-  const isVenomous = result["Venomous status"] === "Venomous"const venomStatus =
+  const venomStatus =
   result["Venomous status"] || result.venom_status
 
 const isVenomous = venomStatus === "Venomous"
-  const isDangerous =
+
+const isDangerous =
   result["Danger Level"] === "High" ||
   venomStatus === "Venomous"
-  const confidenceValue =
+
+const confidenceValue =
   result["Identification Confidence"] || result.confidence || "0%"
 
 const confidence = parseFloat(
