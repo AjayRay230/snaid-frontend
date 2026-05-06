@@ -195,7 +195,7 @@ const confidence = parseFloat(
                       ? "text-emerald-800 dark:text-emerald-300"
                       : "text-muted-foreground"
                     }`}>
-                    {result["Recommended Antivenom"] || result.anivenom}
+                    {result["Recommended Antivenom"] || result.antivenom}
                   </p>
                   {hasAntivenom && (
                     <p className="text-xs text-emerald-600/80 dark:text-emerald-400/60 mt-1">
