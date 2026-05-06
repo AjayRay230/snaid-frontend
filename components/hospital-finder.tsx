@@ -38,22 +38,49 @@ export function HospitalFinder({
 
         const data = await response.json()
 
-        const places =
-          data.suggestedLocations || []
+        console.log("MAPPLS RESPONSE:", data)
 
-        const formattedHospitals =
-          places.map((hospital: any) => ({
-            placeName:
-              hospital.placeName,
-            placeAddress:
-              hospital.placeAddress,
-            latitude:
-              hospital.latitude,
-            longitude:
-              hospital.longitude,
-            distance:
-              hospital.distance,
-          }))
+const places =
+  data.suggestedLocations ||
+  data.results ||
+  []
+
+const formattedHospitals =
+  places.map((hospital: any) => ({
+
+    placeName:
+      hospital.placeName ||
+      hospital.place_name ||
+      "Unknown Hospital",
+
+    placeAddress:
+      hospital.placeAddress ||
+      hospital.place_address ||
+      "Address unavailable",
+
+    latitude:
+      Number(
+        hospital.latitude ||
+        hospital.lat
+      ),
+
+    longitude:
+      Number(
+        hospital.longitude ||
+        hospital.lng
+      ),
+
+    distance:
+      Number(
+        hospital.distance || 0
+      ),
+
+  }))
+
+console.log(
+  "FORMATTED HOSPITALS:",
+  formattedHospitals
+)
 
         setHospitals(formattedHospitals)
 
