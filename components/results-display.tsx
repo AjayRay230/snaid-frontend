@@ -14,14 +14,14 @@ interface ResultsDisplayProps {
 export function ResultsDisplay({ result, onReset }: ResultsDisplayProps) {
   const [barWidth, setBarWidth] = useState(0)
 
-  const isVenomous = result.venom_status === "Venomous"
-  const isDangerous = result.venom_status === "Venomous"
-  const confidence = parseFloat(result.confidence.replace("%", ""))
+  const isVenomous = result["Venomous status"] === "Venomous"
+  const isDangerous = result["Danger Level"] === "High"
+  const confidence = parseFloat(   result["Identification Confidence"].replace("%", "") )
   const hasAntivenom =
-    result.antivenom &&
-    result.antivenom !== "None" &&
-    result.antivenom !== "Not Available" &&
-    result.antivenom !== "Not applicable"
+    result["Recommended Antivenom"] &&
+    result["Recommended Antivenom"] !== "None" &&
+    result["Recommended Antivenom"] !== "Not Available" &&
+    result["Recommended Antivenom"] !== "Not applicable"
 
   useEffect(() => {
     const t = setTimeout(() => setBarWidth(Math.min(confidence, 100)), 150)
@@ -67,7 +67,7 @@ export function ResultsDisplay({ result, onReset }: ResultsDisplayProps) {
                   </span>
                 </div>
                 <h1 className="text-3xl md:text-4xl font-bold italic text-primary leading-tight">
-                  {result.species}
+                  {result["Predicted Species"]}
                 </h1>
               </div>
               <span className={`shrink-0 mt-1 text-xs px-4 py-1.5 rounded-full font-bold border
@@ -75,7 +75,7 @@ export function ResultsDisplay({ result, onReset }: ResultsDisplayProps) {
                   ? "bg-red-100 dark:bg-red-500/20 text-red-700 dark:text-red-300 border-red-300 dark:border-red-500/40"
                   : "bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border-emerald-300 dark:border-emerald-500/40"
                 }`}>
-                {result.venom_status}
+                {result["Venomous status"]}
               </span>
             </div>
 
@@ -89,7 +89,7 @@ export function ResultsDisplay({ result, onReset }: ResultsDisplayProps) {
                   </span>
                 </div>
                 <span className="text-2xl font-black font-mono tabular-nums text-blue-700 dark:text-blue-300">
-                  {result.confidence}
+                  {result["Identification Confidence"]}
                 </span>
               </div>
               <div className="w-full bg-blue-200 dark:bg-blue-900/60 rounded-full h-3 overflow-hidden">
@@ -112,7 +112,7 @@ export function ResultsDisplay({ result, onReset }: ResultsDisplayProps) {
                 <span className="text-sm font-bold text-foreground">About This Species</span>
               </div>
               <p className="text-sm text-foreground/70 dark:text-foreground/65 leading-relaxed">
-                {result.about}
+                {result["About This Snake"]}
               </p>
             </div>
 
@@ -124,7 +124,7 @@ export function ResultsDisplay({ result, onReset }: ResultsDisplayProps) {
                   Habitat &amp; Distribution
                 </span>
               </div>
-              <p className="text-sm text-foreground/70">{result.habitat}</p>
+              <p className="text-sm text-foreground/70">{result["Habitat & Distribution"]}</p>
             </div>
           </div>
         </div>
@@ -183,7 +183,7 @@ export function ResultsDisplay({ result, onReset }: ResultsDisplayProps) {
                       ? "text-emerald-800 dark:text-emerald-300"
                       : "text-muted-foreground"
                     }`}>
-                    {result.antivenom}
+                    {result["Recommended Antivenom"]}
                   </p>
                   {hasAntivenom && (
                     <p className="text-xs text-emerald-600/80 dark:text-emerald-400/60 mt-1">
@@ -209,7 +209,7 @@ export function ResultsDisplay({ result, onReset }: ResultsDisplayProps) {
                   "Remove jewelry or tight clothing near the bite",
                   "Do not catch, kill, or handle the snake",
                   "Do not apply tourniquets, ice, or cut the wound",
-                  `Tell medical staff: species is "${result.species}"`,
+                  `Tell medical staff: species is "${result["Predicted Species"]}"`,
                   "Antivenom may be required — every second counts",
                 ].map((step, i) => (
                   <li key={i} className="flex gap-3 text-red-800 dark:text-red-300/90 text-sm">
