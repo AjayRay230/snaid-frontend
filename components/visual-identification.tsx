@@ -29,7 +29,7 @@ export default function VisualIdentification({
 
   // User Location
   const [userState, setUserState] = useState("")
-  const [locationLoading, setLocationLoading] = useState(true)
+ 
 
   // Filters
   const [selectedColor, setSelectedColor] = useState("")
@@ -69,52 +69,7 @@ export default function VisualIdentification({
 
   }, [])
 
-  // Detect User Location
-//   useEffect(() => {
 
-//     if (!navigator.geolocation) {
-//       setLocationLoading(false)
-//       return
-//     }
-
-//     navigator.geolocation.getCurrentPosition(
-
-//       async (position) => {
-
-//         try {
-
-//           const lat = position.coords.latitude
-//           const lon = position.coords.longitude
-
-//                 const response = await fetch(
-//         `/api/location?type=state&lat=${lat}&lng=${lon}`
-//         )
-
-//           const data = await response.json()
-
-//             const state = data.state || ""
-//             console.log("Detected State:", state)
-//           setUserState(state)
-
-//         } catch (err) {
-
-//           console.error(err)
-
-//         } finally {
-
-//           setLocationLoading(false)
-
-//         }
-
-//       },
-
-//       () => {
-//         setLocationLoading(false)
-//       }
-
-//     )
-
-//   }, [])
 
   // Reset Pagination on Filter Change
   useEffect(() => {
@@ -171,7 +126,7 @@ export default function VisualIdentification({
   ]
 
   // Loading UI
-  if (loading || locationLoading) {
+  if (loading ) {
     return (
       <div className="py-20 text-center text-lg font-medium text-green-800">
         Loading snake database...
