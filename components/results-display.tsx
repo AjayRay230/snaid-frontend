@@ -14,9 +14,14 @@ interface ResultsDisplayProps {
 export function ResultsDisplay({ result, onReset }: ResultsDisplayProps) {
   const [barWidth, setBarWidth] = useState(0)
 
-  const isVenomous = result["Venomous status"] === "Venomous"
-  const isDangerous = result["Danger Level"] === "High"
-  const confidence = parseFloat(   result["Identification Confidence"].replace("%", "") )
+  const isVenomous = result["Venomous status"] === "Venomous"const venomStatus =
+  result["Venomous status"] || result.venom_status
+
+const isVenomous = venomStatus === "Venomous"
+  const isDangerous =
+  result["Danger Level"] === "High" ||
+  venomStatus === "Venomous"
+  const confidenceValue =   result["Identification Confidence"] || result.confidence || "0%"  const confidence = parseFloat(   confidenceValue.replace("%", "") )
   const hasAntivenom =
     result["Recommended Antivenom"] &&
     result["Recommended Antivenom"] !== "None" &&
@@ -67,7 +72,7 @@ export function ResultsDisplay({ result, onReset }: ResultsDisplayProps) {
                   </span>
                 </div>
                 <h1 className="text-3xl md:text-4xl font-bold italic text-primary leading-tight">
-                  {result["Predicted Species"]}
+                  {result["Predicted Species"] || result.species}
                 </h1>
               </div>
               <span className={`shrink-0 mt-1 text-xs px-4 py-1.5 rounded-full font-bold border
@@ -75,7 +80,7 @@ export function ResultsDisplay({ result, onReset }: ResultsDisplayProps) {
                   ? "bg-red-100 dark:bg-red-500/20 text-red-700 dark:text-red-300 border-red-300 dark:border-red-500/40"
                   : "bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border-emerald-300 dark:border-emerald-500/40"
                 }`}>
-                {result["Venomous status"]}
+                {result["Venomous status"] || result.venom_status}
               </span>
             </div>
 
@@ -89,7 +94,7 @@ export function ResultsDisplay({ result, onReset }: ResultsDisplayProps) {
                   </span>
                 </div>
                 <span className="text-2xl font-black font-mono tabular-nums text-blue-700 dark:text-blue-300">
-                  {result["Identification Confidence"]}
+                  {result["Identification Confidence"] || result.confidence}
                 </span>
               </div>
               <div className="w-full bg-blue-200 dark:bg-blue-900/60 rounded-full h-3 overflow-hidden">
@@ -112,7 +117,7 @@ export function ResultsDisplay({ result, onReset }: ResultsDisplayProps) {
                 <span className="text-sm font-bold text-foreground">About This Species</span>
               </div>
               <p className="text-sm text-foreground/70 dark:text-foreground/65 leading-relaxed">
-                {result["About This Snake"]}
+                {result["About This Snake"] || result.about}
               </p>
             </div>
 
@@ -124,7 +129,7 @@ export function ResultsDisplay({ result, onReset }: ResultsDisplayProps) {
                   Habitat &amp; Distribution
                 </span>
               </div>
-              <p className="text-sm text-foreground/70">{result["Habitat & Distribution"]}</p>
+              <p className="text-sm text-foreground/70">{result["Habitat & Distribution"] || result.habitat}</p>
             </div>
           </div>
         </div>
@@ -183,7 +188,7 @@ export function ResultsDisplay({ result, onReset }: ResultsDisplayProps) {
                       ? "text-emerald-800 dark:text-emerald-300"
                       : "text-muted-foreground"
                     }`}>
-                    {result["Recommended Antivenom"]}
+                    {result["Recommended Antivenom"] || result.anivenom}
                   </p>
                   {hasAntivenom && (
                     <p className="text-xs text-emerald-600/80 dark:text-emerald-400/60 mt-1">
