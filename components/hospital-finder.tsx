@@ -5,8 +5,7 @@ import { useEffect, useState } from "react"
 interface Hospital {
   placeName: string
   placeAddress: string
-  latitude: number
-  longitude: number
+  eLoc: string
   distance: number
 }
 
@@ -38,49 +37,41 @@ export function HospitalFinder({
 
         const data = await response.json()
 
-        console.log("MAPPLS RESPONSE:", data)
+        console.log(
+          "MAPPLS RESPONSE:",
+          data
+        )
 
-const places =
-  data.suggestedLocations ||
-  data.results ||
-  []
+        const places =
+          data.suggestedLocations ||
+          data.results ||
+          []
 
-const formattedHospitals =
-  places.map((hospital: any) => ({
+        const formattedHospitals =
+          places.map((hospital: any) => ({
 
-    placeName:
-      hospital.placeName ||
-      hospital.place_name ||
-      "Unknown Hospital",
+            placeName:
+              hospital.placeName ||
+              "Unknown Hospital",
 
-    placeAddress:
-      hospital.placeAddress ||
-      hospital.place_address ||
-      "Address unavailable",
+            placeAddress:
+              hospital.placeAddress ||
+              "Address unavailable",
 
-    latitude:
-      Number(
-        hospital.latitude ||
-        hospital.lat
-      ),
+            eLoc:
+              hospital.eLoc,
 
-    longitude:
-      Number(
-        hospital.longitude ||
-        hospital.lng
-      ),
+            distance:
+              Number(
+                hospital.distance || 0
+              ),
 
-    distance:
-      Number(
-        hospital.distance || 0
-      ),
+          }))
 
-  }))
-
-console.log(
-  "FORMATTED HOSPITALS:",
-  formattedHospitals
-)
+        console.log(
+          "FORMATTED HOSPITALS:",
+          formattedHospitals
+        )
 
         setHospitals(formattedHospitals)
 
@@ -121,6 +112,7 @@ console.log(
 
     <div className="space-y-6 rounded-3xl bg-white p-8 shadow-lg">
 
+      {/* Header */}
       <div>
 
         <h2 className="text-2xl font-bold text-gray-900">
@@ -145,6 +137,7 @@ console.log(
 
             <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
 
+              {/* Info */}
               <div className="space-y-2">
 
                 <h3 className="text-lg font-bold text-red-900">
@@ -161,12 +154,12 @@ console.log(
 
               </div>
 
-              {/* Actions */}
+              {/* Buttons */}
               <div className="flex gap-3">
 
-                {/* View on Map */}
+                {/* View */}
                 <a
-                  href={`https://www.google.com/maps?q=${hospital.latitude},${hospital.longitude}`}
+                  href={`https://www.mappls.com/${hospital.eLoc}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="rounded-xl bg-white px-4 py-3 text-sm font-semibold text-gray-800 shadow transition hover:bg-gray-100"
@@ -176,7 +169,7 @@ console.log(
 
                 {/* Navigate */}
                 <a
-                  href={`https://www.google.com/maps/dir/?api=1&destination=${hospital.latitude},${hospital.longitude}`}
+                  href={`https://www.mappls.com/${hospital.eLoc}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="rounded-xl bg-red-700 px-5 py-3 text-sm font-semibold text-white shadow transition hover:bg-red-800"
