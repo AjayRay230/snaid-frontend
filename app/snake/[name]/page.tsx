@@ -85,8 +85,7 @@ export default function SnakePage() {
       {userLocation && (
 
         <HospitalFinder
-          latitude={userLocation.lat}
-          longitude={userLocation.lng}
+         userLocation={userLocation}
         />
 
       )}

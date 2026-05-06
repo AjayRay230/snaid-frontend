@@ -258,7 +258,9 @@ const confidence = parseFloat(
         <div className="bg-card rounded-2xl shadow-lg border border-border overflow-hidden mb-4 animate-fade-up-3">
           <div className="h-1.5 bg-gradient-to-r from-transparent via-red-500 to-transparent" />
           <div className="p-6">
-            <HospitalFinder />
+            <HospitalFinder 
+            userLocation={result.userLocation ?? null}
+            />
           </div>
         </div>
 

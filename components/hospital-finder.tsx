@@ -10,20 +10,37 @@ interface Hospital {
 }
 
 interface HospitalFinderProps {
-  latitude: number
-  longitude: number
+  userLocation: {
+    lat: number
+    lng: number
+  } | null
 }
 
 export function HospitalFinder({
-  latitude,
-  longitude,
-}: HospitalFinderProps) {
+  userLocation,
+}: HospitalFinderProps){
 
+  const latitude = userLocation?.lat
+const longitude = userLocation?.lng
   const [hospitals, setHospitals] =
     useState<Hospital[]>([])
 
   const [loading, setLoading] =
     useState(true)
+
+    if (!latitude || !longitude) {
+  return (
+    <div className="rounded-3xl bg-white p-8 shadow-lg">
+      <h2 className="text-2xl font-bold text-gray-900">
+        Nearby Hospitals
+      </h2>
+
+      <p className="mt-4 text-gray-600">
+        Location unavailable
+      </p>
+    </div>
+  )
+}
 
   useEffect(() => {
 
