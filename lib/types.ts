@@ -17,7 +17,10 @@ export interface SnakeResult {
   about?: string
   habitat?: string
   antivenom?: string
-
+  userLocation?: {
+  lat: number
+  lng: number
+} | null
   error?: string
 }
 

@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState, useRef } from "react"
+import { useState, useRef,useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
@@ -19,8 +19,32 @@ export function ImageIdentification({ onIdentificationComplete }: ImageIdentific
   const [fileName, setFileName] = useState<string>("")
   const [error, setError] = useState<string>("")
   const [isDragging, setIsDragging] = useState(false)
+  const [userLocation, setUserLocation] =
+  useState<{
+    lat: number
+    lng: number
+  } | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
+  useEffect(() => {
+
+  if (!navigator.geolocation) return
+
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+
+      setUserLocation({
+        lat: position.coords.latitude,
+        lng: position.coords.longitude,
+      })
+
+    },
+    (error) => {
+      console.error(error)
+    }
+  )
+
+}, [])
   const processFile = (f: File) => {
     setFile(f)
     setFileName(f.name)
@@ -59,7 +83,10 @@ export function ImageIdentification({ onIdentificationComplete }: ImageIdentific
       }
       const data: SnakeResult = await res.json()
       if (data.error) throw new Error(data.error)
-      onIdentificationComplete(data)
+      onIdentificationComplete({
+    ...data,
+    userLocation,
+     })
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to identify snake")
     } finally {

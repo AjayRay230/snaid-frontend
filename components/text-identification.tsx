@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
+import { useState,useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -35,6 +35,31 @@ export function TextIdentification({ onIdentificationComplete }: TextIdentificat
   const [description, setDescription] = useState("")
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string>("")
+  const [userLocation, setUserLocation] =
+  useState<{
+    lat: number
+    lng: number
+  } | null>(null)
+
+useEffect(() => {
+
+  if (!navigator.geolocation) return
+
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+
+      setUserLocation({
+        lat: position.coords.latitude,
+        lng: position.coords.longitude,
+      })
+
+    },
+    (error) => {
+      console.error(error)
+    }
+  )
+
+}, [])
 
   const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setDescription(e.target.value)
@@ -64,7 +89,10 @@ export function TextIdentification({ onIdentificationComplete }: TextIdentificat
 
       if (data.error) throw new Error(data.error)
 
-      onIdentificationComplete(data)
+      onIdentificationComplete({
+        ...data,
+       userLocation,
+      })
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to identify snake")
     } finally {
