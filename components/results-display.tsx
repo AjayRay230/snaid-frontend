@@ -151,7 +151,9 @@ export function ResultsDisplay({ result, onReset }: ResultsDisplayProps) {
                   ? "bg-red-100 dark:bg-red-500/20 text-red-700 dark:text-red-300 border-red-300 dark:border-red-500/40 animate-danger-pulse"
                   : "bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border-emerald-300 dark:border-emerald-500/40"
                 }`}>
-                {isDangerous ? "⚠" : "✓"} {result["Danger Level"].toUpperCase()}
+                {result["Danger Level"]?.toUpperCase() || "UNKNOWN"}
+                {result["Predicted Species"] || "Unknown Species"}
+                {result["Venomous status"] || "Unknown"}
               </span>
               {isDangerous && (
                 <span className="text-xs text-red-600 dark:text-red-400 font-medium">
