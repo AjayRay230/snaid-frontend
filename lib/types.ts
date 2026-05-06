@@ -20,3 +20,20 @@ export interface SnakeResult {
 
   error?: string
 }
+
+
+export interface SnakeData {
+  Name: string
+  Binomial: string
+  Region: string
+  Color: string
+  Habitat: string
+  "Body Shape": string
+  "Head Shape": string
+  Scales: string
+  Fangs: string
+  Image: string
+  "Venomous status": string
+  "Recommended Antivenom": string
+  "About This Snake": string
+}

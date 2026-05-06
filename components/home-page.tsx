@@ -1,16 +1,21 @@
 "use client"
 
-import { useState } from "react"
+import { useState ,useEffect} from "react"
 import { ImageIdentification } from "./image-identification"
 import { TextIdentification } from "./text-identification"
+import VisualIdentification from "./visual-identification"
 import { ResultsDisplay } from "./results-display"
 import type { SnakeResult } from "@/lib/types"
 import { AlertTriangle, Zap, Moon, Sun, Dna } from "lucide-react"
 import { useTheme } from "next-themes"
 import { Button } from "@/components/ui/button"
-
 function ThemeToggle() {
   const { theme, setTheme } = useTheme()
+
+ 
+
+  
+
   return (
     <Button
       variant="ghost"
@@ -28,7 +33,32 @@ function ThemeToggle() {
 export function HomePage() {
   const [result, setResult] = useState<SnakeResult | null>(null)
   const [showResults, setShowResults] = useState(false)
-  const [activeTab, setActiveTab] = useState<"image" | "text">("image")
+  const [activeTab, setActiveTab] = useState<"image" | "text" | "visual">("image")
+ const [userLocation, setUserLocation] =
+  useState<{
+    lat: number
+    lng: number
+  } | null>(null)
+
+useEffect(() => {
+
+  if (!navigator.geolocation) return
+
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+
+      setUserLocation({
+        lat: position.coords.latitude,
+        lng: position.coords.longitude,
+      })
+
+    },
+    (error) => {
+      console.error(error)
+    }
+  )
+
+}, [])
 
   const handleIdentificationComplete = (r: SnakeResult | null) => {
     setResult(r)
@@ -93,7 +123,7 @@ export function HomePage() {
           <div className="px-6 pt-5">
             {/* Tab switcher */}
             <div className="grid grid-cols-2 gap-1.5 p-1 rounded-xl bg-muted mb-6">
-              {(["image", "text"] as const).map((tab) => (
+              {(["image", "text","visual"] as const).map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
@@ -103,15 +133,34 @@ export function HomePage() {
                       : "text-muted-foreground hover:text-foreground"
                     }`}
                 >
-                  {tab === "image" ? "By Image" : "By Description"}
+                        {
+                        tab === "image"
+                          ? "By Image"
+                          : tab === "text"
+                          ? "By Description"
+                          : "By Visual"
+                        }
                 </button>
               ))}
             </div>
 
-            {activeTab === "image"
-              ? <ImageIdentification onIdentificationComplete={handleIdentificationComplete} />
-              : <TextIdentification onIdentificationComplete={handleIdentificationComplete} />
-            }
+                  {activeTab === "image" && (
+                    <ImageIdentification
+                      onIdentificationComplete={handleIdentificationComplete}
+                    />
+                  )}
+
+                  {activeTab === "text" && (
+                    <TextIdentification
+                      onIdentificationComplete={handleIdentificationComplete}
+                    />
+                  )}
+
+                  {activeTab === "visual" && (
+                    <VisualIdentification  
+                    userLocation={userLocation}
+                    />
+                  )}
           </div>
 
           <div className="h-6" />
