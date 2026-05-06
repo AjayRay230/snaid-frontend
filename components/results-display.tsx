@@ -15,7 +15,7 @@ export function ResultsDisplay({ result, onReset }: ResultsDisplayProps) {
   const [barWidth, setBarWidth] = useState(0)
 
   const isVenomous = result.venom_status === "Venomous"
-  const isDangerous = result["Danger Level"] === "High"
+  const isDangerous = result.venom_status === "Venomous"
   const confidence = parseFloat(result.confidence.replace("%", ""))
   const hasAntivenom =
     result.antivenom &&
