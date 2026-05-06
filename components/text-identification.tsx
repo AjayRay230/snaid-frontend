@@ -9,7 +9,14 @@ import type { SnakeResult } from "@/lib/types"
 import { Loader2, Lightbulb, X, Search } from "lucide-react"
 
 interface TextIdentificationProps {
-  onIdentificationComplete: (result: SnakeResult | null) => void
+  onIdentificationComplete: (
+    result: SnakeResult | null
+  ) => void
+
+  userLocation: {
+    lat: number
+    lng: number
+  } | null
 }
 
 const EXAMPLE_DESCRIPTIONS = [
@@ -31,36 +38,13 @@ const EXAMPLE_DESCRIPTIONS = [
   },
 ]
 
-export function TextIdentification({ onIdentificationComplete }: TextIdentificationProps) {
+export function TextIdentification({
+  onIdentificationComplete,
+  userLocation,
+}: TextIdentificationProps) {
   const [description, setDescription] = useState("")
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string>("")
-  const [userLocation, setUserLocation] =
-  useState<{
-    lat: number
-    lng: number
-  } | null>(null)
-
-useEffect(() => {
-
-  if (!navigator.geolocation) return
-
-  navigator.geolocation.getCurrentPosition(
-    (position) => {
-
-      setUserLocation({
-        lat: position.coords.latitude,
-        lng: position.coords.longitude,
-      })
-
-    },
-    (error) => {
-      console.error(error)
-    }
-  )
-
-}, [])
-
   const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setDescription(e.target.value)
     setError("")

@@ -147,12 +147,14 @@ useEffect(() => {
                   {activeTab === "image" && (
                     <ImageIdentification
                       onIdentificationComplete={handleIdentificationComplete}
+                      userLocation={userLocation}
                     />
                   )}
 
                   {activeTab === "text" && (
                     <TextIdentification
                       onIdentificationComplete={handleIdentificationComplete}
+                      userLocation={userLocation}
                     />
                   )}
 

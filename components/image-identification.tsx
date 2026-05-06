@@ -9,42 +9,28 @@ import type { SnakeResult } from "@/lib/types"
 import { Upload, Loader2, X, Camera, ImageIcon } from "lucide-react"
 
 interface ImageIdentificationProps {
-  onIdentificationComplete: (result: SnakeResult | null) => void
-}
+  onIdentificationComplete: (
+    result: SnakeResult | null
+  ) => void
 
-export function ImageIdentification({ onIdentificationComplete }: ImageIdentificationProps) {
+  userLocation: {
+    lat: number
+    lng: number
+  } | null
+}
+ export function ImageIdentification({
+  onIdentificationComplete,
+  userLocation,
+}: ImageIdentificationProps){
   const [preview, setPreview] = useState<string | null>(null)
   const [file, setFile] = useState<File | null>(null)
   const [loading, setLoading] = useState(false)
   const [fileName, setFileName] = useState<string>("")
   const [error, setError] = useState<string>("")
   const [isDragging, setIsDragging] = useState(false)
-  const [userLocation, setUserLocation] =
-  useState<{
-    lat: number
-    lng: number
-  } | null>(null)
+  
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  useEffect(() => {
-
-  if (!navigator.geolocation) return
-
-  navigator.geolocation.getCurrentPosition(
-    (position) => {
-
-      setUserLocation({
-        lat: position.coords.latitude,
-        lng: position.coords.longitude,
-      })
-
-    },
-    (error) => {
-      console.error(error)
-    }
-  )
-
-}, [])
   const processFile = (f: File) => {
     setFile(f)
     setFileName(f.name)
