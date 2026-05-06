@@ -21,7 +21,12 @@ const isVenomous = venomStatus === "Venomous"
   const isDangerous =
   result["Danger Level"] === "High" ||
   venomStatus === "Venomous"
-  const confidenceValue =   result["Identification Confidence"] || result.confidence || "0%"  const confidence = parseFloat(   confidenceValue.replace("%", "") )
+  const confidenceValue =
+  result["Identification Confidence"] || result.confidence || "0%"
+
+const confidence = parseFloat(
+  confidenceValue.replace("%", "")
+)
   const hasAntivenom =
     result["Recommended Antivenom"] &&
     result["Recommended Antivenom"] !== "None" &&
