@@ -49,7 +49,10 @@ export function TextIdentification({
     setDescription(e.target.value)
     setError("")
   }
-
+  console.log(
+  "TEXT LOCATION:",
+  userLocation
+)
   const handleIdentify = async () => {
     if (!description.trim()) return
     setLoading(true)
@@ -73,10 +76,16 @@ export function TextIdentification({
 
       if (data.error) throw new Error(data.error)
 
-      onIdentificationComplete({
-        ...data,
-       userLocation,
-      })
+      const finalLocation =
+  userLocation ||
+  JSON.parse(
+    localStorage.getItem("userLocation") || "null"
+  )
+
+onIdentificationComplete({
+  ...data,
+  userLocation: finalLocation,
+})
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to identify snake")
     } finally {
@@ -147,31 +156,7 @@ export function TextIdentification({
         </div>
       )}
 
-      {/* Tips */}
-      <Card className="bg-muted/40 border-muted">
-        <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-semibold text-foreground/70">
-            Tips for Better Identification
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="pt-0">
-          <ul className="space-y-1.5 text-sm text-foreground/60">
-            {[
-              "Describe color and any patterns (stripes, bands, spots)",
-              "Mention size and body shape (slender, stocky, thick)",
-              "Include location and habitat (forest, field, near water)",
-              "Note any distinctive features (hood, markings, behavior)",
-            ].map((tip, i) => (
-              <li key={i} className="flex gap-2">
-                <span className="text-primary font-bold shrink-0">•</span>
-                <span>{tip}</span>
-              </li>
-            ))}
-          </ul>
-        </CardContent>
-      </Card>
-
-      {/* Actions */}
+            {/* Actions */}
       <div className="flex gap-3">
         <Button
           onClick={handleIdentify}
@@ -198,6 +183,32 @@ export function TextIdentification({
           </Button>
         )}
       </div>
+
+      {/* Tips */}
+      <Card className="bg-muted/40 border-muted">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-sm font-semibold text-foreground/70">
+            Tips for Better Identification
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="pt-0">
+          <ul className="space-y-1.5 text-sm text-foreground/60">
+            {[
+              "Describe color and any patterns (stripes, bands, spots)",
+              "Mention size and body shape (slender, stocky, thick)",
+              "Include location and habitat (forest, field, near water)",
+              "Note any distinctive features (hood, markings, behavior)",
+            ].map((tip, i) => (
+              <li key={i} className="flex gap-2">
+                <span className="text-primary font-bold shrink-0">•</span>
+                <span>{tip}</span>
+              </li>
+            ))}
+          </ul>
+        </CardContent>
+      </Card>
+
+
     </div>
   )
 }
