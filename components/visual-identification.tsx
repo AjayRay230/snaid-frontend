@@ -97,7 +97,7 @@ export default function VisualIdentification({
 
       const data = await response.json()
 
-      console.log("LOCATION DATA:", data)
+      
 
       const detectedState =
         data.address?.state ||

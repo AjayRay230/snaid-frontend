@@ -49,10 +49,7 @@ export function TextIdentification({
     setDescription(e.target.value)
     setError("")
   }
-  console.log(
-  "TEXT LOCATION:",
-  userLocation
-)
+  
   const handleIdentify = async () => {
     if (!description.trim()) return
     setLoading(true)

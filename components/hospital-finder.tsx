@@ -42,10 +42,7 @@ const longitude = userLocation?.lng
 
         const data = await response.json()
 
-        console.log(
-          "MAPPLS RESPONSE:",
-          data
-        )
+
 
         const places =
           data.suggestedLocations ||
@@ -73,10 +70,7 @@ const longitude = userLocation?.lng
 
           }))
 
-        console.log(
-          "FORMATTED HOSPITALS:",
-          formattedHospitals
-        )
+
 
         setHospitals(formattedHospitals)
 
