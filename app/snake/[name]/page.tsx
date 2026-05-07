@@ -15,12 +15,14 @@ export default function SnakePage() {
 
   const [snake, setSnake] =
     useState<SnakeData | null>(null)
-    const [userLocation, setUserLocation] =
-  useState<{
-    lat: number
-    lng: number
-  } | null>(null)
 
+  const [userLocation, setUserLocation] =
+    useState<{
+      lat: number
+      lng: number
+    } | null>(null)
+
+  // Load snake details
   useEffect(() => {
 
     async function fetchSnake() {
@@ -44,25 +46,19 @@ export default function SnakePage() {
 
   }, [params.name])
 
+  // Read already-fetched location from localStorage
   useEffect(() => {
 
-  if (!navigator.geolocation) return
+    const storedLocation =
+      localStorage.getItem("userLocation")
 
-  navigator.geolocation.getCurrentPosition(
-    (position) => {
-
-      setUserLocation({
-        lat: position.coords.latitude,
-        lng: position.coords.longitude,
-      })
-
-    },
-    (error) => {
-      console.error(error)
+    if (storedLocation) {
+      setUserLocation(
+        JSON.parse(storedLocation)
+      )
     }
-  )
 
-}, [])
+  }, [])
 
   if (!snake) {
     return (
@@ -74,24 +70,24 @@ export default function SnakePage() {
 
   return (
 
-  <div className="min-h-screen bg-[#edf5eb] p-6">
+    <div className="min-h-screen bg-[#edf5eb] p-6">
 
-    <div className="mx-auto max-w-7xl space-y-8">
+      <div className="mx-auto max-w-7xl space-y-8">
 
-      {/* Snake Details */}
-      <SnakeDetails snake={snake} />
+        {/* Snake Details */}
+        <SnakeDetails snake={snake} />
 
-      {/* Hospital Finder */}
-      {userLocation && (
+        {/* Hospital Finder */}
+        {userLocation && (
 
-        <HospitalFinder
-         userLocation={userLocation}
-        />
+          <HospitalFinder
+            userLocation={userLocation}
+          />
 
-      )}
+        )}
+
+      </div>
 
     </div>
-
-  </div>
-)
+  )
 }

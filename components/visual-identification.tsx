@@ -83,6 +83,43 @@ export default function VisualIdentification({
     selectedHeadShape,
   ])
 
+  useEffect(() => {
+
+  async function fetchUserState() {
+
+    if (!userLocation) return
+
+    try {
+
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${userLocation.lat}&lon=${userLocation.lng}`
+      )
+
+      const data = await response.json()
+
+      console.log("LOCATION DATA:", data)
+
+      const detectedState =
+        data.address?.state ||
+        data.address?.region ||
+        ""
+
+      setUserState(detectedState)
+
+    } catch (error) {
+
+      console.error(
+        "Failed to fetch user state:",
+        error
+      )
+
+    }
+  }
+
+  fetchUserState()
+
+}, [userLocation])
+
   // Has Filters
   const hasSelectedFilters =
     selectedColor ||

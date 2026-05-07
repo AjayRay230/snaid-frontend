@@ -47,10 +47,17 @@ useEffect(() => {
   navigator.geolocation.getCurrentPosition(
     (position) => {
 
-      setUserLocation({
+      const location = {
         lat: position.coords.latitude,
         lng: position.coords.longitude,
-      })
+      }
+
+      setUserLocation(location)
+
+      localStorage.setItem(
+        "userLocation",
+        JSON.stringify(location)
+      )
 
     },
     (error) => {

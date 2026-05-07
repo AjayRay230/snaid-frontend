@@ -28,19 +28,7 @@ const longitude = userLocation?.lng
   const [loading, setLoading] =
     useState(true)
 
-    if (!latitude || !longitude) {
-  return (
-    <div className="rounded-3xl bg-white p-8 shadow-lg">
-      <h2 className="text-2xl font-bold text-gray-900">
-        Nearby Hospitals
-      </h2>
 
-      <p className="mt-4 text-gray-600">
-        Location unavailable
-      </p>
-    </div>
-  )
-}
 
   useEffect(() => {
 
@@ -106,6 +94,20 @@ const longitude = userLocation?.lng
     fetchHospitals()
 
   }, [latitude, longitude])
+
+      if (!latitude || !longitude) {
+  return (
+    <div className="rounded-3xl bg-white p-8 shadow-lg">
+      <h2 className="text-2xl font-bold text-gray-900">
+        Nearby Hospitals
+      </h2>
+
+      <p className="mt-4 text-gray-600">
+        Location unavailable
+      </p>
+    </div>
+  )
+}
 
   if (loading) {
 
