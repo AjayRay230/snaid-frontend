@@ -32,7 +32,7 @@ export function SnakeDetails({
           <div>
 
             <img
-              src={snake.Image || "/placeholder.jpg"}
+              src={snake.Image_url || "/placeholder.jpg"}
               alt={snake.Name}
               className="h-[450px] w-full rounded-3xl object-cover shadow-lg"
             />

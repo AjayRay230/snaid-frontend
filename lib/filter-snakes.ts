@@ -59,13 +59,18 @@ export function filterSnakes({
     let matchScore = 0
 
     // Color Match (Highest Weight)
-    if (
-      selectedColor &&
-      normalize(snake.Color) === normalize(selectedColor)
-    ) {
-      matchScore += 4
-    }
+if (selectedColor) {
 
+  const snakeColors = snake.Color
+    ?.split(/[;,]/) // support ; and ,
+    .map((c) => normalize(c))
+
+  if (
+    snakeColors?.includes(normalize(selectedColor))
+  ) {
+    matchScore += 4
+  }
+}
     // Habitat Match
     if (
       selectedHabitat &&

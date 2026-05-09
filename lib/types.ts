@@ -11,17 +11,22 @@ export interface SnakeResult {
   "Recommended Antivenom"?: string
 
   // TEXT RESPONSE
+   snakes?: SnakeData[]
+
   species?: string
   confidence?: string
   venom_status?: string
   about?: string
   habitat?: string
   antivenom?: string
+
   userLocation?: {
-  lat: number
-  lng: number
-} | null
+    lat: number
+    lng: number
+  } | null
+
   error?: string
+
 }
 
 
@@ -35,7 +40,7 @@ export interface SnakeData {
   "Head Shape": string
   Scales: string
   Fangs: string
-  Image: string
+   Image_url?: string
   "Venomous status": string
   "Recommended Antivenom": string
   "About This Snake": string

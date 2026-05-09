@@ -16,6 +16,55 @@ interface VisualIdentificationProps {
   } | null
 }
 
+function getDisplayLabel(color: string) {
+
+  const normalized =
+    color.toLowerCase()
+
+  if (normalized.includes("green"))
+    return "Green"
+
+  if (normalized.includes("black"))
+    return "Black"
+
+  if (normalized.includes("brown"))
+    return "Brown"
+
+  if (normalized.includes("gray"))
+    return "Gray"
+
+  if (normalized.includes("grey"))
+    return "Gray"
+
+  if (normalized.includes("red"))
+    return "Red"
+
+  if (normalized.includes("yellow"))
+    return "Yellow"
+
+  if (normalized.includes("olive"))
+    return "Olive"
+
+  if (normalized.includes("orange"))
+    return "Orange"
+
+  if (normalized.includes("purple"))
+    return "Purple"
+
+  if (normalized.includes("gold"))
+    return "Golden"
+
+  if (normalized.includes("bronze"))
+    return "Bronze"
+
+  if (normalized.includes("cream"))
+    return "Cream"
+
+  if (normalized.includes("silver"))
+    return "Silver"
+
+  return color
+}
 export default function VisualIdentification({
   userLocation,
 }: VisualIdentificationProps) {
@@ -138,30 +187,58 @@ export default function VisualIdentification({
   })
 
   // Unique Options
-  const uniqueColors = [
-    ...new Set(
-      snakes.map((snake) => snake.Color).filter(Boolean)
-    ),
-  ]
+ const uniqueColors = Array.from(
+  new Map(
 
-  const uniqueHabitats = [
-    ...new Set(
-      snakes.map((snake) => snake.Habitat).filter(Boolean)
-    ),
-  ]
+    snakes
+      .filter((snake) => snake.Color)
+      .map((snake) => {
 
-  const uniqueBodyShapes = [
-    ...new Set(
-      snakes.map((snake) => snake["Body Shape"]).filter(Boolean)
-    ),
-  ]
+        const original =
+          snake.Color.trim()
 
-  const uniqueHeadShapes = [
-    ...new Set(
-      snakes.map((snake) => snake["Head Shape"]).filter(Boolean)
-    ),
-  ]
+        const display =
+          getDisplayLabel(original)
 
+        return [
+          display,
+          display,
+        ]
+
+      })
+
+  ).values()
+).sort()
+
+const uniqueHabitats = Array.from(
+  new Set(
+    snakes
+      .map((snake) =>
+        snake.Habitat?.trim()
+      )
+      .filter(Boolean)
+  )
+).sort()
+
+const uniqueBodyShapes = Array.from(
+  new Set(
+    snakes
+      .map((snake) =>
+        snake["Body Shape"]?.trim()
+      )
+      .filter(Boolean)
+  )
+).sort()
+
+const uniqueHeadShapes = Array.from(
+  new Set(
+    snakes
+      .map((snake) =>
+        snake["Head Shape"]?.trim()
+      )
+      .filter(Boolean)
+  )
+).sort()
   // Loading UI
   if (loading ) {
     return (

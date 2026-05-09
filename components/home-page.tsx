@@ -9,6 +9,7 @@ import type { SnakeResult } from "@/lib/types"
 import { AlertTriangle, Zap, Moon, Sun, Dna } from "lucide-react"
 import { useTheme } from "next-themes"
 import { Button } from "@/components/ui/button"
+import { TextResultsDisplay } from "./text-results-display"
 function ThemeToggle() {
   const { theme, setTheme } = useTheme()
 
@@ -77,14 +78,43 @@ useEffect(() => {
     setShowResults(false)
   }
 
-  if (showResults && result) {
+if (showResults && result) {
+
+  // TEXT IDENTIFICATION FLOW
+  if (result.snakes) {
     return (
       <>
         <ThemeToggle />
-        <ResultsDisplay result={result} onReset={handleReset} />
+
+        <div className="mesh-bg min-h-screen p-6">
+
+          <button
+            onClick={handleReset}
+            className="mb-6 rounded-xl bg-red-500 px-4 py-2 text-white"
+          >
+            Back
+          </button>
+
+          <TextResultsDisplay
+            snakes={result.snakes}
+          />
+
+        </div>
       </>
     )
   }
+
+  // OLD IMAGE IDENTIFICATION FLOW
+  return (
+    <>
+      <ThemeToggle />
+      <ResultsDisplay
+        result={result}
+        onReset={handleReset}
+      />
+    </>
+  )
+}
 
   return (
     <div className="mesh-bg min-h-screen">

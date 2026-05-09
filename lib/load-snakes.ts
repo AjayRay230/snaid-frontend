@@ -15,13 +15,19 @@ export async function loadSnakes(): Promise<SnakeData[]> {
 
       const csvText = await response.text()
 
-      Papa.parse<SnakeData>(csvText, {
+      // IMPORTANT:
+      // Removed <SnakeData>
+      Papa.parse(csvText, {
         header: true,
         skipEmptyLines: true,
 
-        complete: (results) => {
+        complete: (results: any) => {
+
+          // DEBUG
+          
+
           // Clean + normalize data
-          const cleanedData: SnakeData[] = results.data.map((snake) => ({
+          const cleanedData: SnakeData[] = results.data.map((snake: any) => ({
             ...snake,
 
             // Remove unnecessary spaces
@@ -30,15 +36,28 @@ export async function loadSnakes(): Promise<SnakeData[]> {
             Region: snake.Region?.trim() || "",
             Color: snake.Color?.trim() || "",
             Habitat: snake.Habitat?.trim() || "",
-            "Body Shape": snake["Body Shape"]?.trim() || "",
-            "Head Shape": snake["Head Shape"]?.trim() || "",
+
+            "Body Shape":
+              snake["Body Shape"]?.trim() || "",
+
+            "Head Shape":
+              snake["Head Shape"]?.trim() || "",
+
             Scales: snake.Scales?.trim() || "",
             Fangs: snake.Fangs?.trim() || "",
-            Image: snake.Image?.trim() || "",
+
+            // IMAGE FIX
+            Image_url:
+              snake["image_url"]?.trim() ||
+              snake["Image_url"]?.trim() ||
+              "",
+
             "Venomous status":
               snake["Venomous status"]?.trim() || "",
+
             "Recommended Antivenom":
               snake["Recommended Antivenom"]?.trim() || "",
+
             "About This Snake":
               snake["About This Snake"]?.trim() || "",
           }))
@@ -47,7 +66,7 @@ export async function loadSnakes(): Promise<SnakeData[]> {
         },
 
         error: (error: Error) => {
-         reject(error)
+          reject(error)
         },
       })
     } catch (error) {

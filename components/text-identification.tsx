@@ -7,7 +7,8 @@ import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import type { SnakeResult } from "@/lib/types"
 import { Loader2, Lightbulb, X, Search } from "lucide-react"
-
+import { loadSnakes } from "@/lib/load-snakes"
+import { SnakeData } from "@/lib/types"
 interface TextIdentificationProps {
   onIdentificationComplete: (
     result: SnakeResult | null
@@ -51,44 +52,96 @@ export function TextIdentification({
   }
   
   const handleIdentify = async () => {
-    if (!description.trim()) return
-    setLoading(true)
-    setError("")
 
-    try {
-      const form = new FormData()
-      form.append("text", description.trim())
+  if (!description.trim()) return
 
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/describe-snake`, {
+  setLoading(true)
+  setError("")
+
+  try {
+
+    const form = new FormData()
+
+    form.append(
+      "text",
+      description.trim()
+    )
+
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/describe-snake`,
+      {
         method: "POST",
         body: form,
-      })
-
-      if (!res.ok) {
-        const errData = await res.json().catch(() => ({}))
-        throw new Error(errData.detail || `Server error: ${res.status}`)
       }
+    )
 
-      const data: SnakeResult = await res.json()
+    if (!res.ok) {
 
-      if (data.error) throw new Error(data.error)
+      const errData = await res
+        .json()
+        .catch(() => ({}))
 
-      const finalLocation =
-  userLocation ||
-  JSON.parse(
-    localStorage.getItem("userLocation") || "null"
-  )
-
-onIdentificationComplete({
-  ...data,
-  userLocation: finalLocation,
-})
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to identify snake")
-    } finally {
-      setLoading(false)
+      throw new Error(
+        errData.detail ||
+        `Server error: ${res.status}`
+      )
     }
+
+    // Backend response
+    const data = await res.json()
+
+    // Load snakes from CSV
+    const allSnakes = await loadSnakes()
+
+    // Match backend names with CSV
+const matchedSnakes: SnakeData[] =
+  data.species_names
+    .map((snakeName: string) =>
+      allSnakes.find(
+        (snake: SnakeData) =>
+          snake.Name
+            .toLowerCase()
+            .trim() ===
+          snakeName
+            .toLowerCase()
+            .trim()
+      )
+    )
+    .filter(
+      (
+        snake: SnakeData | undefined
+      ): snake is SnakeData =>
+        Boolean(snake)
+    )
+
+    const finalLocation =
+      userLocation ||
+      JSON.parse(
+        localStorage.getItem(
+          "userLocation"
+        ) || "null"
+      )
+
+    // Send matched snakes
+    onIdentificationComplete({
+      snakes: matchedSnakes,
+      userLocation: finalLocation,
+    })
+
+  } catch (err) {
+
+    setError(
+      err instanceof Error
+        ? err.message
+        : "Failed to identify snake"
+    )
+
+  } finally {
+
+    setLoading(false)
+
   }
+}
 
   const handleExampleClick = (desc: string) => {
     setDescription(desc)

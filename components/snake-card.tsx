@@ -26,7 +26,7 @@ export function SnakeCard({
     const isVenomous =
   snake["Venomous status"] === "1"
 const router = useRouter()
-
+console.log(snake.Image_url)
   return (
 
     <div
@@ -41,7 +41,7 @@ const router = useRouter()
       <div className="relative overflow-hidden">
 
         <img
-          src={snake.Image || "/placeholder.jpg"}
+          src={snake.Image_url || "/placeholder.jpg"}
           alt={snake.Name}
           className="h-60 w-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
