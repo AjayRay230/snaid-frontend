@@ -10,7 +10,86 @@ interface FilterParams {
   selectedBodyShape: string
   selectedHeadShape: string
 }
+const normalizeBodyShape = (
+  value?: string
+) => {
 
+  const normalized =
+    value?.toLowerCase().trim() || ""
+
+  if (
+  
+  normalized.includes("slender") ||
+  normalized.includes("slim") ||
+  normalized.includes("lean") ||
+  normalized.includes("thin")
+)
+{
+    return "slender"
+  }
+
+  if (
+    normalized.includes("compact") ||
+    normalized.includes("short") ||
+    normalized.includes("stubby")
+  ) {
+    return "compact"
+  }
+
+  if (
+    normalized.includes("elongated") ||
+    normalized.includes("lengthy")
+  ) {
+    return "elongated"
+  }
+
+  if (
+    normalized.includes("threadlike") ||
+    normalized.includes("whiplike") ||
+    normalized.includes("needlelike") ||
+    normalized.includes("hairlike")
+  ) {
+    return "threadlike"
+  }
+
+  if (
+    normalized.includes("robust") ||
+    normalized.includes("stout") ||
+    normalized.includes("bulky") ||
+    normalized.includes("massive") ||
+    normalized.includes("heavy")
+  ) {
+    return "robust"
+  }
+
+  if (
+    normalized.includes("flexible")
+  ) {
+    return "flexible"
+  }
+
+  if (
+    normalized.includes("cylindrical")
+  ) {
+    return "cylindrical"
+  }
+
+  if (
+    normalized.includes("flattened") ||
+    normalized.includes("compressed")
+  ) {
+    return "flattened"
+  }
+
+  if (
+    normalized.includes("streamlined") ||
+    normalized.includes("aquatic")
+  ) {
+    return "streamlined"
+  }
+
+  return normalized
+}
 export function filterSnakes({
   snakes,
   userState,
@@ -72,17 +151,45 @@ if (selectedColor) {
   }
 }
     // Habitat Match
-    if (
-      selectedHabitat &&
-      normalize(snake.Habitat) === normalize(selectedHabitat)
-    ) {
-      matchScore += 3
-    }
+    // Habitat Match
+if (selectedHabitat) {
+
+  const snakeHabitats =
+    snake.Habitat
+      ?.split(/[;,]/)
+      .map((habitat) =>
+
+        normalize(
+
+          habitat
+            .replace(
+              /([a-z])([A-Z])/g,
+              "$1 $2"
+            )
+            .trim()
+
+        )
+
+      )
+
+  if (
+    snakeHabitats?.includes(
+      normalize(selectedHabitat)
+    )
+  ) {
+    matchScore += 3
+  }
+}
 
     // Body Shape Match
     if (
       selectedBodyShape &&
-      normalize(snake["Body Shape"]) === normalize(selectedBodyShape)
+      normalizeBodyShape(
+  snake["Body Shape"]
+) ===
+normalizeBodyShape(
+  selectedBodyShape
+)
     ) {
       matchScore += 2
     }

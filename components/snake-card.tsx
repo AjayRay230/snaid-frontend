@@ -26,7 +26,7 @@ export function SnakeCard({
     const isVenomous =
   snake["Venomous status"] === "1"
 const router = useRouter()
-console.log(snake.Image_url)
+
   return (
 
     <div

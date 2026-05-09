@@ -1,4 +1,5 @@
 "use client"
+import { useState } from "react"
 const displayColorMap: Record<string, string> = {
   red: "bg-red-500",
   green: "bg-green-500",
@@ -23,7 +24,51 @@ const displayColorMap: Record<string, string> = {
   crimson: "bg-red-700",
   coral: "bg-rose-400",
 }
+function getBodyShapeIcon(
+  shape: string
+) {
 
+  const value =
+    shape.toLowerCase()
+
+  if (
+    value.includes("slender")
+  ) return "🪱"
+
+  if (
+    value.includes("robust")
+  ) return "🐍"
+
+  if (
+    value.includes("threadlike")
+  ) return "🧵"
+
+  if (
+    value.includes("elongated")
+  ) return "📏"
+
+  if (
+    value.includes("compact")
+  ) return "📦"
+
+  if (
+    value.includes("flattened")
+  ) return "🪵"
+
+  if (
+    value.includes("streamlined")
+  ) return "🌊"
+
+  if (
+    value.includes("cylindrical")
+  ) return "🥖"
+
+  if (
+    value.includes("flexible")
+  ) return "➰"
+
+  return "📍"
+}
 function getColorClass(color: string) {
 
   const normalized =
@@ -39,6 +84,59 @@ function getColorClass(color: string) {
   return "bg-gray-300"
 }
 
+function getHabitatIcon(
+  habitat: string
+) {
+
+  const value =
+    habitat.toLowerCase()
+
+  if (
+    value.includes("forest")
+  ) return "🌲"
+
+  if (
+    value.includes("wetland") ||
+    value.includes("swamp") ||
+    value.includes("marsh")
+  ) return "🌊"
+
+  if (
+    value.includes("desert")
+  ) return "🏜️"
+
+  if (
+    value.includes("grass")
+  ) return "🌾"
+
+  if (
+    value.includes("mountain") ||
+    value.includes("hill")
+  ) return "⛰️"
+
+  if (
+    value.includes("river") ||
+    value.includes("stream") ||
+    value.includes("lake")
+  ) return "💧"
+
+  if (
+    value.includes("coast") ||
+    value.includes("reef") ||
+    value.includes("sea")
+  ) return "🌊"
+
+  if (
+    value.includes("bamboo")
+  ) return "🎋"
+
+  if (
+    value.includes("tree") ||
+    value.includes("canopy")
+  ) return "🌳"
+
+  return "📍"
+}
 function getDisplayLabel(color: string) {
 
   const normalized =
@@ -133,7 +231,75 @@ function normalizeColor(color: string) {
 
   return "Other"
 }
+function getHeadShapeIcon(
+  shape: string
+) {
 
+  const value =
+    shape.toLowerCase()
+
+  // Cobra-like
+  if (
+    value.includes("hooded")
+  ) return "🐍"
+
+  // Viper-like
+  if (
+    value.includes("triangular") ||
+    value.includes("angular")
+  ) return "🔻"
+
+  // Rounded/Oval
+  if (
+    value.includes("rounded") ||
+    value.includes("oval")
+  ) return "🟢"
+
+  // Narrow / pointed
+  if (
+    value.includes("narrow") ||
+    value.includes("pointed") ||
+    value.includes("tapered")
+  ) return "🗡️"
+
+  // Flattened
+  if (
+    value.includes("flattened")
+  ) return "🪨"
+
+  // Long snout
+  if (
+    value.includes("elongated") ||
+    value.includes("long")
+  ) return "📏"
+
+  // Blunt
+  if (
+    value.includes("blunt")
+  ) return "🟫"
+
+  // Horned
+  if (
+    value.includes("horn")
+  ) return "🦏"
+
+  // Leaf shaped
+  if (
+    value.includes("leaf")
+  ) return "🍃"
+
+  // Beaked
+  if (
+    value.includes("beaked")
+  ) return "🦅"
+
+  // Broad headed
+  if (
+    value.includes("broad")
+  ) return "⬛"
+
+  return "🐾"
+}
 interface FeatureFiltersProps {
   selectedColor: string
   setSelectedColor: (value: string) => void
@@ -172,6 +338,10 @@ export function FeatureFilters({
   uniqueHeadShapes,
 }: FeatureFiltersProps) {
 
+  const [showColorDropdown, setShowColorDropdown] =
+  useState(false)
+ const [showHabitatDropdown, setShowHabitatDropdown] =
+  useState(false)
   const resetFilters = () => {
     setSelectedColor("")
     setSelectedHabitat("")
@@ -209,59 +379,185 @@ export function FeatureFilters({
 
 
 {/* Color Dropdown */}
-<div className="space-y-2">
+<div className="relative">
 
-  <label className="text-sm font-semibold text-green-900">
+  <label className="mb-2 block text-sm font-medium text-green-900">
     Color
   </label>
 
-  <select
-    value={selectedColor}
-    onChange={(e) =>
-      setSelectedColor(e.target.value)
+  <button
+    type="button"
+    onClick={() =>
+      setShowColorDropdown(
+        !showColorDropdown
+      )
     }
-    className="w-full rounded-2xl border border-green-200 bg-white px-4 py-3 text-sm shadow-sm outline-none transition focus:border-green-500"
+    className="flex h-11 w-full items-center justify-between rounded-xl border border-green-200 bg-white px-4 text-left text-sm shadow-sm outline-none transition focus:border-green-500 focus:ring-2 focus:ring-green-100"
   >
 
-    <option value="">
-      All Colors
-    </option>
+ <div className="flex items-center gap-3">
 
-    {uniqueColors.map((color) => (
-      <option
-        key={color}
-        value={color}
+  {selectedColor ? (
+
+    <span
+      className={`h-4 w-4 rounded-full ${getColorClass(
+        selectedColor
+      )}`}
+    />
+
+  ) : (
+
+    <span>
+      🎨
+    </span>
+
+  )}
+
+  <span>
+    {selectedColor || "All Colors"}
+  </span>
+
+</div>
+
+    <span>⌄</span>
+
+  </button>
+
+  {showColorDropdown && (
+
+    <div className="absolute z-50 mt-2 max-h-72 w-full overflow-y-auto rounded-2xl border border-green-200 bg-white p-2 shadow-xl">
+
+      <button
+        type="button"
+        onClick={() => {
+          setSelectedColor("")
+          setShowColorDropdown(false)
+        }}
+        className="mb-1 w-full rounded-xl px-3 py-2 text-left hover:bg-green-50"
       >
-        {color}
-      </option>
-    ))}
+        <span>🎨</span>
+       <span> All Colors</span>
+      </button>
 
-  </select>
+      {uniqueColors.map((color) => (
+
+        <button
+          key={color}
+          type="button"
+          onClick={() => {
+            setSelectedColor(color)
+            setShowColorDropdown(false)
+          }}
+          className="flex w-full items-center gap-3 rounded-xl px-3 py-2 hover:bg-green-50"
+        >
+
+          <span
+            className={`h-4 w-4 rounded-full ${getColorClass(
+              color
+            )}`}
+          />
+
+          <span>
+            {getDisplayLabel(color)}
+          </span>
+
+        </button>
+
+      ))}
+
+    </div>
+
+  )}
 
 </div>
 
         {/* Habitat */}
-        <div className="space-y-2">
+<div className="relative">
 
-          <label className="text-sm font-medium text-green-900">
-            Habitat
-          </label>
+  <label className="mb-2 block text-sm font-medium text-green-900">
+    Habitat
+  </label>
 
-          <select
-            value={selectedHabitat}
-            onChange={(e) => setSelectedHabitat(e.target.value)}
-            className="h-11 w-full rounded-xl border border-green-200 bg-white px-4 text-sm shadow-sm outline-none transition focus:border-green-500 focus:ring-2 focus:ring-green-100"
-          >
-            <option value="">All Habitats</option>
+  <button
+    type="button"
+    onClick={() =>
+      setShowHabitatDropdown(
+        !showHabitatDropdown
+      )
+    }
+    className="flex h-11 w-full items-center justify-between rounded-xl border border-green-200 bg-white px-4 text-left text-sm shadow-sm outline-none transition focus:border-green-500 focus:ring-2 focus:ring-green-100"
+  >
 
-            {uniqueHabitats.map((habitat) => (
-              <option key={habitat} value={habitat}>
-                {habitat}
-              </option>
-            ))}
-          </select>
+    <div className="flex items-center gap-3">
 
-        </div>
+      <span>
+        {selectedHabitat
+          ? getHabitatIcon(
+              selectedHabitat
+            )
+          : "🌍"}
+      </span>
+
+      <span>
+        {selectedHabitat ||
+          "All Habitats"}
+      </span>
+
+    </div>
+
+    <span>⌄</span>
+
+  </button>
+
+  {showHabitatDropdown && (
+
+    <div className="absolute z-50 mt-2 max-h-72 w-full overflow-y-auto rounded-2xl border border-green-200 bg-white p-2 shadow-xl">
+
+      <button
+        type="button"
+        onClick={() => {
+          setSelectedHabitat("")
+          setShowHabitatDropdown(false)
+        }}
+        className="mb-1 flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left hover:bg-green-50"
+      >
+        <span>🌍</span>
+        <span>All Habitats</span>
+      </button>
+
+      {uniqueHabitats.map((habitat) => (
+
+        <button
+          key={habitat}
+          type="button"
+          onClick={() => {
+            setSelectedHabitat(
+              habitat
+            )
+            setShowHabitatDropdown(false)
+          }}
+          className="flex h-11 w-full items-center justify-between rounded-xl border border-green-200 bg-white px-4 text-left text-sm shadow-sm outline-none transition focus:border-green-500 focus:ring-2 focus:ring-green-100"
+        >
+
+          <span>
+            {getHabitatIcon(
+              habitat
+            )}
+          </span>
+
+          <span>
+            {habitat}
+          </span>
+
+        </button>
+
+      ))}
+
+    </div>
+
+  )}
+
+</div>
 
         {/* Body Shape */}
         <div className="space-y-2">
@@ -275,13 +571,18 @@ export function FeatureFilters({
             onChange={(e) => setSelectedBodyShape(e.target.value)}
             className="h-11 w-full rounded-xl border border-green-200 bg-white px-4 text-sm shadow-sm outline-none transition focus:border-green-500 focus:ring-2 focus:ring-green-100"
           >
-            <option value="">All Body Shapes</option>
+           <option value="">
+  🐍 All Body Shapes
+</option>
 
-            {uniqueBodyShapes.map((shape) => (
-              <option key={shape} value={shape}>
-                {shape}
-              </option>
-            ))}
+{uniqueBodyShapes.map((shape) => (
+  <option
+    key={shape}
+    value={shape}
+  >
+    {getBodyShapeIcon(shape)} {shape}
+  </option>
+))}
           </select>
 
         </div>
@@ -298,13 +599,18 @@ export function FeatureFilters({
             onChange={(e) => setSelectedHeadShape(e.target.value)}
             className="h-11 w-full rounded-xl border border-green-200 bg-white px-4 text-sm shadow-sm outline-none transition focus:border-green-500 focus:ring-2 focus:ring-green-100"
           >
-            <option value="">All Head Shapes</option>
+<option value="">
+  🐍 All Head Shapes
+</option>
 
-            {uniqueHeadShapes.map((shape) => (
-              <option key={shape} value={shape}>
-                {shape}
-              </option>
-            ))}
+{uniqueHeadShapes.map((shape) => (
+  <option
+    key={shape}
+    value={shape}
+  >
+    {getHeadShapeIcon(shape)} {shape}
+  </option>
+))}
           </select>
 
         </div>

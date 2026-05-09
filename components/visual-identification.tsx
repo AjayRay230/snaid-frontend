@@ -209,26 +209,130 @@ export default function VisualIdentification({
 
   ).values()
 ).sort()
+const formatHabitatLabel = (
+  value: string
+) => {
 
+  return value
+    .replace(
+      /([a-z])([A-Z])/g,
+      "$1 $2"
+    )
+    .replace(/_/g, " ")
+    .trim()
+}
 const uniqueHabitats = Array.from(
   new Set(
-    snakes
-      .map((snake) =>
-        snake.Habitat?.trim()
-      )
-      .filter(Boolean)
+
+    snakes.flatMap((snake) =>
+
+      snake.Habitat
+        ?.split(/[;,]/)
+        .map((habitat) =>
+          formatHabitatLabel(
+            habitat.trim()
+          )
+        ) || []
+
+    )
+
   )
 ).sort()
+
+
+const normalizeBodyShape = (
+  value: string
+) => {
+
+  const normalized =
+    value.toLowerCase().trim()
+
+  if (
+    normalized.includes("slender") ||
+    normalized.includes("slim") ||
+    normalized.includes("lean") ||
+    normalized.includes("thin")
+  ) {
+    return "Slender"
+  }
+
+  if (
+    normalized.includes("compact") ||
+    normalized.includes("short") ||
+    normalized.includes("stubby")
+  ) {
+    return "Compact"
+  }
+
+  if (
+    normalized.includes("elongated") ||
+    normalized.includes("lengthy")
+  ) {
+    return "Elongated"
+  }
+
+  if (
+    normalized.includes("threadlike") ||
+    normalized.includes("whiplike") ||
+    normalized.includes("needlelike") ||
+    normalized.includes("hairlike")
+  ) {
+    return "Threadlike"
+  }
+
+  if (
+    normalized.includes("robust") ||
+    normalized.includes("stout") ||
+    normalized.includes("bulky") ||
+    normalized.includes("massive") ||
+    normalized.includes("heavy")
+  ) {
+    return "Robust"
+  }
+
+  if (
+    normalized.includes("flexible")
+  ) {
+    return "Flexible"
+  }
+
+  if (
+    normalized.includes("cylindrical")
+  ) {
+    return "Cylindrical"
+  }
+
+  if (
+    normalized.includes("flattened") ||
+    normalized.includes("compressed")
+  ) {
+    return "Flattened"
+  }
+
+  if (
+    normalized.includes("streamlined") ||
+    normalized.includes("aquatic")
+  ) {
+    return "Streamlined"
+  }
+
+  return value.trim()
+}
 
 const uniqueBodyShapes = Array.from(
   new Set(
-    snakes
-      .map((snake) =>
-        snake["Body Shape"]?.trim()
+
+    snakes.map((snake) =>
+      normalizeBodyShape(
+        snake["Body Shape"] || ""
       )
-      .filter(Boolean)
+    )
+
   )
-).sort()
+)
+.sort()
+.filter(Boolean)
+
 
 const uniqueHeadShapes = Array.from(
   new Set(
